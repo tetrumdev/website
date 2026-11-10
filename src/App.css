@@ -1,0 +1,73 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logoContainer {
+    width: 200px;
+    height: 200px;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    transition: scale 0.5s ease;
+    cursor: pointer;
+    margin: 0;
+}
+
+.tetrumLogo {
+    width: 200px;
+    height: 200px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+}
+
+.logoContainer:hover:not(:disabled) {
+    scale: 1.15;
+}
+
+.logoContainer.isSpinning {
+    scale: 1;
+    transition: scale 0.15s ease;
+    cursor: default;
+}
+
+.isSpinning .tetrumLogo {
+    animation: logoSpin 5s cubic-bezier(0.3, 1, 0.6, 1);
+}
+
+@keyframes logoSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(2520deg);
+    }
+}
+
+.header {
+    font-size: 4rem;
+    margin: 0;
+    margin-top: 20px;
+    padding: 0;
+    font-weight: 900;
+    text-align: center;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+.subheader {
+    font-family: "Lexend Variable", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #a0a0a0;
+    font-weight: 300;
+    text-align: center;
+    user-select: none;
+    -moz-user-select: none;
+}
