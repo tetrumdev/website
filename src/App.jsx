@@ -18,7 +18,7 @@ function App() {
         onClick={handleLogoClick}
       >
         <img
-          src="/tetrum.svg"
+          src={`${import.meta.env.BASE_URL}tetrum.svg`}
           alt="Tetrum Logo"
           className="tetrumLogo"
           draggable="false"
