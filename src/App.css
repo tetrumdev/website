@@ -4,6 +4,136 @@
     align-items: center;
 }
 
+.site {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.site .header {
+    opacity: 1;
+    transition: opacity 0.35s ease;
+}
+
+.site.isDeparting .header,
+.site.isDeparting .menuBar {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.site.isDeparting .logoContainer {
+    visibility: hidden;
+}
+
+.departureOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    overflow: hidden;
+    cursor: wait;
+}
+
+.departureLogo {
+    position: absolute;
+    transform-origin: center;
+    will-change: transform;
+}
+
+.departureLogo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+}
+
+.departureBackdrop,
+.departureBlackout {
+    position: absolute;
+    inset: 0;
+    background: black;
+    opacity: 0;
+    will-change: opacity;
+}
+
+.menuBar {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    width: 48px;
+    height: 48px;
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    color: white;
+    background: transparent;
+    border: 1px solid rgba(100, 100, 100, 0.5);
+    border-radius: 15px;
+    overflow: hidden;
+    transition:
+        border 0.2s ease,
+        width 0.4s cubic-bezier(0.85, 0, 0.1, 1),
+        opacity 0.35s ease;
+}
+
+.menuBar.isOpen {
+    width: var(--menu-width, 48px);
+    max-width: calc(100dvw - 2em);
+}
+
+.menuBar:active {
+    border: 1px solid rgba(100, 100, 100, 0.75);
+}
+
+.menuIcon {
+    position: absolute;
+    top: 14px;
+    left: 12px;
+    width: 22px;
+    height: 18px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.menuIcon > span {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    margin-top: -1px;
+    border-radius: 1px;
+    background: currentColor;
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.menuIcon > span:first-child {
+    transform: translateY(-7px);
+}
+
+.menuIcon > span:last-child {
+    transform: translateY(7px);
+}
+
+.menuBar.isOpen .menuIcon > span:first-child {
+    transform: rotate(45deg);
+}
+
+.menuBar.isOpen .menuIcon > span:nth-child(2) {
+    opacity: 0;
+}
+
+.menuBar.isOpen .menuIcon > span:last-child {
+    transform: rotate(-45deg);
+}
+
+.menuBar:active .menuIcon,
+.menuBtn:focus-visible .menuIcon {
+    opacity: 1;
+}
+
 .logoContainer {
     width: 200px;
     height: 200px;
@@ -27,8 +157,18 @@
     -webkit-user-drag: none;
 }
 
-.logoContainer:hover:not(:disabled) {
-    scale: 1.15;
+@media (hover: hover) and (pointer: fine) {
+    .menuBar:hover {
+        border: 1px solid rgba(100, 100, 100, 0.75);
+    }
+
+    .menuBar:hover .menuIcon {
+        opacity: 0.75;
+    }
+
+    .logoContainer:hover:not(:disabled) {
+        scale: 1.15;
+    }
 }
 
 .logoContainer.isSpinning {
@@ -70,4 +210,87 @@
     text-align: center;
     user-select: none;
     -moz-user-select: none;
+}
+
+.menuBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.menuBtn:focus-visible {
+    outline: 2px solid white;
+    outline-offset: -3px;
+}
+
+.menuItems {
+    --item-count: 3;
+    --item-gap: 20px;
+    position: absolute;
+    top: 0;
+    left: 60px;
+    width: max-content;
+    max-width: calc(100dvw - 2em - 76px);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: var(--item-gap);
+    visibility: hidden;
+    transition: visibility 0s linear 0.35s;
+}
+
+.menuBar.isOpen .menuItems {
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.menuItem {
+    position: relative;
+    flex-shrink: 0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+    transition-delay: calc((var(--item-count) - 1 - var(--item-index)) * 100ms);
+}
+
+.menuItem > p {
+    margin: 0;
+}
+
+.menuItem + .menuItem::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: calc(var(--item-gap) / -2);
+    width: 1px;
+    height: 18px;
+    background: rgba(100, 100, 100, 0.5);
+    transform: translateY(-50%);
+}
+
+.menuBar:not(.isOpen) {
+    transition-delay: 0s, 0.15s, 0s;
+}
+
+.menuBar.isOpen .menuItem {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: calc(80ms + var(--item-index) * 100ms);
+}
+
+.menuLink {
+    color: white;
 }
