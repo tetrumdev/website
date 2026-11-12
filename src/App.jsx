@@ -11,6 +11,7 @@ function vibrateOnTap() {
 
 function App() {
   const [spinning, setSpinning] = useState(false);
+  const [intro, setIntro] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuItemsRef = useRef(null);
   const logoRef = useRef(null);
@@ -90,7 +91,9 @@ function App() {
   };
 
   return (
-    <div className={`site${departure ? " isDeparting" : ""}`}>
+    <div
+      className={`site${intro ? " isIntro" : ""}${departure ? " isDeparting" : ""}`}
+    >
       <div
         className={`menuBar${menuOpen ? " isOpen" : ""}`}
         onClick={handleLinkClick}
@@ -145,7 +148,7 @@ function App() {
         type="button"
         className={`logoContainer${spinning ? " isSpinning" : ""}`}
         aria-label="Spin Tetrum logo"
-        disabled={spinning || !!departure}
+        disabled={intro || spinning || !!departure}
         onClick={handleLogoClick}
       >
         <img
@@ -154,7 +157,10 @@ function App() {
           alt="Tetrum Logo"
           className="tetrumLogo"
           draggable="false"
-          onAnimationEnd={() => setSpinning(false)}
+          onAnimationEnd={(event) => {
+            if (event.animationName === "logoIntro") setIntro(false);
+            else setSpinning(false);
+          }}
         />
       </button>
       <h1 className="header">Tetrum</h1>
